@@ -1,0 +1,73 @@
+{
+  "info": {
+    "name": "DevFolio API",
+    "description": "Local public and owner requests for the Django REST portfolio. Create a Django superuser and sign in before running owner requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://127.0.0.1:8000/api" },
+    { "key": "accessToken", "value": "" },
+    { "key": "refreshToken", "value": "" },
+    { "key": "postSlug", "value": "replace-with-post-slug" },
+    { "key": "projectSlug", "value": "replace-with-project-slug" },
+    { "key": "categoryId", "value": "1" },
+    { "key": "tagId", "value": "1" },
+    { "key": "commentId", "value": "1" },
+    { "key": "messageId", "value": "1" }
+  ],
+  "item": [
+    {
+      "name": "Public reads",
+      "item": [
+        { "name": "Profile", "request": { "method": "GET", "url": "{{baseUrl}}/profile/" } },
+        { "name": "Skills", "request": { "method": "GET", "url": "{{baseUrl}}/skills/" } },
+        { "name": "Experience", "request": { "method": "GET", "url": "{{baseUrl}}/experiences/" } },
+        { "name": "Education", "request": { "method": "GET", "url": "{{baseUrl}}/education/" } },
+        { "name": "Projects", "request": { "method": "GET", "url": "{{baseUrl}}/projects/" } },
+        { "name": "Project detail", "request": { "method": "GET", "url": "{{baseUrl}}/projects/{{projectSlug}}/" } },
+        { "name": "Posts", "request": { "method": "GET", "url": "{{baseUrl}}/posts/" } },
+        { "name": "Post detail", "request": { "method": "GET", "header": [{ "key": "X-Visitor-Id", "value": "postman-visitor" }], "url": "{{baseUrl}}/posts/{{postSlug}}/" } },
+        { "name": "Approved comments", "request": { "method": "GET", "url": "{{baseUrl}}/posts/{{postSlug}}/comments/" } },
+        { "name": "Categories", "request": { "method": "GET", "url": "{{baseUrl}}/categories/" } },
+        { "name": "Category detail", "request": { "method": "GET", "url": "{{baseUrl}}/categories/{{categoryId}}/" } },
+        { "name": "Tags", "request": { "method": "GET", "url": "{{baseUrl}}/tags/" } },
+        { "name": "Tag detail", "request": { "method": "GET", "url": "{{baseUrl}}/tags/{{tagId}}/" } }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        { "name": "Login owner", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"username\":\"replace-with-superuser\",\"password\":\"replace-with-local-password\"}" }, "url": "{{baseUrl}}/auth/login/" } },
+        { "name": "Current owner", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": "{{baseUrl}}/auth/me/" } },
+        { "name": "Refresh token", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"refresh\":\"{{refreshToken}}\"}" }, "url": "{{baseUrl}}/auth/refresh/" } },
+        { "name": "Logout owner", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"refresh\":\"{{refreshToken}}\"}" }, "url": "{{baseUrl}}/auth/logout/" } },
+        { "name": "Change owner password", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"old_password\":\"replace-me\",\"new_password\":\"replace-with-strong-local-password\"}" }, "url": "{{baseUrl}}/auth/change-password/" } }
+      ]
+    },
+    {
+      "name": "Visitor writes",
+      "item": [
+        { "name": "Toggle like", "request": { "method": "POST", "header": [{ "key": "X-Visitor-Id", "value": "postman-visitor" }], "url": "{{baseUrl}}/posts/{{postSlug}}/like/" } },
+        { "name": "Submit comment for approval", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Reader\",\"email\":\"reader@example.test\",\"content\":\"A thoughtful comment.\"}" }, "url": "{{baseUrl}}/posts/{{postSlug}}/comments/" } },
+        { "name": "Send contact message", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Reader\",\"email\":\"reader@example.test\",\"subject\":\"A note\",\"message\":\"A sufficiently long contact message.\"}" }, "url": "{{baseUrl}}/contact/" } }
+      ]
+    },
+    {
+      "name": "Owner writes and inbox",
+      "item": [
+        { "name": "Update profile", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"headline\":\"Replace with your real professional headline\"}" }, "url": "{{baseUrl}}/profile/" } },
+        { "name": "Create skill", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Your skill\",\"category\":\"TOOLS\",\"proficiency\":50}" }, "url": "{{baseUrl}}/skills/" } },
+        { "name": "Create experience", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"company\":\"Your company\",\"role\":\"Your role\",\"employment_type\":\"FULL_TIME\",\"start_date\":\"2020-01-01\",\"end_date\":\"2021-01-01\",\"is_current\":false}" }, "url": "{{baseUrl}}/experiences/" } },
+        { "name": "Create education", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"institution\":\"Your institution\",\"degree\":\"Your degree\",\"start_year\":2020}" }, "url": "{{baseUrl}}/education/" } },
+        { "name": "Create project", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"Your project\",\"summary\":\"Your real project summary\",\"category\":\"WEB\",\"github_url\":\"https://github.com/replace-me/project\"}" }, "url": "{{baseUrl}}/projects/" } },
+        { "name": "Create category", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Your category\"}" }, "url": "{{baseUrl}}/categories/" } },
+        { "name": "Create tag", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"name\":\"Your tag\"}" }, "url": "{{baseUrl}}/tags/" } },
+        { "name": "Create draft post", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"title\":\"A real article title\",\"excerpt\":\"Write your own summary.\",\"content\":\"Write and publish original article content here.\",\"status\":\"DRAFT\"}" }, "url": "{{baseUrl}}/posts/" } },
+        { "name": "Approve comment", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"is_approved\":true}" }, "url": "{{baseUrl}}/comments/{{commentId}}/" } },
+        { "name": "Contact inbox", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": "{{baseUrl}}/contact/" } },
+        { "name": "Mark message read", "request": { "method": "PATCH", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }, { "key": "Content-Type", "value": "application/json" }], "body": { "mode": "raw", "raw": "{\"is_read\":true}" }, "url": "{{baseUrl}}/contact/{{messageId}}/" } },
+        { "name": "Dashboard stats", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{accessToken}}" }], "url": "{{baseUrl}}/dashboard/stats/" } }
+      ]
+    }
+  ]
+}
